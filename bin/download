@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+current_script_path=${BASH_SOURCE[0]}
+plugin_dir=$(dirname "$(dirname "$current_script_path")")
+
+# shellcheck source=../lib/utils.bash
+source "${plugin_dir}/lib/utils.bash"
+
+mkdir -p "$ASDF_DOWNLOAD_PATH"
+
+# Determine URL and use basename for filename
+url=$(determine_download_url "$ASDF_INSTALL_VERSION")
+filename="$ASDF_DOWNLOAD_PATH/$(basename "$url")"
+
+# Download file to the download directory
+download_release "$ASDF_INSTALL_VERSION" "$filename"
+
+# No extraction here - we'll handle extraction in the install script
+# We just need to download the file and leave it in ASDF_DOWNLOAD_PATH
